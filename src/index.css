@@ -1,0 +1,35 @@
+:root {
+  --blurple: #5865f2;
+  --blurple-dark: #4752c4;
+  --bg: #313338;
+  --bg-secondary: #2b2d31;
+  --bg-input: #1e1f22;
+  --text: #f2f3f5;
+  --text-muted: #b5bac1;
+  --link: #00a8fc;
+  --danger: #fa777c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+  background: var(--bg);
+}
