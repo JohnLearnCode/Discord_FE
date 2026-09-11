@@ -33,15 +33,43 @@ export const api = {
     }),
   getServers: () => request('/servers'),
   getServer: (id) => request(`/servers/${id}`),
+  getServerChannels: (id) => request(`/servers/${id}/channels`),
+  searchServers: (name) => request(`/servers/search?name=${encodeURIComponent(name)}`),
   createServer: (payload) =>
     request('/servers', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
+  updateServer: (id, payload) =>
+    request(`/servers/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+  deleteServer: (id) =>
+    request(`/servers/${id}`, {
+      method: 'DELETE',
+    }),
+  joinServer: (id, userId) =>
+    request(`/servers/${id}/join`, {
+      method: 'POST',
+      body: JSON.stringify({ userId }),
+    }),
   getCatalogs: () => request('/catalogs'),
+  createCatalog: (title) =>
+    request('/catalogs', {
+      method: 'POST',
+      body: JSON.stringify({ title }),
+    }),
   getTextChannels: () => request('/text-channels'),
   getVoiceChannels: () => request('/voice-channels'),
   getUsers: () => request('/users'),
+  searchUserByUsername: (username) =>
+    request(`/users/search?username=${encodeURIComponent(username)}`),
+  getFriend: (userId) => request(`/users/${userId}/friends`),
+  getConversation: (userId1, userId2) =>
+    request(
+      `/messages-p2p/conversation?userId1=${encodeURIComponent(userId1)}&userId2=${encodeURIComponent(userId2)}`,
+    ),
   getMessagesByChannel: (channelId) => request(`/messages-group/channel/${channelId}`),
   sendMessage: (payload) =>
     request('/messages-group', {
@@ -81,6 +109,10 @@ export const api = {
     request(`/catalogs/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
+    }),
+  deleteCatalog: (id) =>
+    request(`/catalogs/${id}`, {
+      method: 'DELETE',
     }),
   getFriendshipsByUser: (userId) => request(`/friendships/user/${userId}`),
   sendFriendRequest: (senderId, receiverId) =>
