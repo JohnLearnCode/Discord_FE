@@ -1,11 +1,17 @@
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
-const BASE_URL = `${API_URL}/api`
+import { API_BASE_URL } from './config.js'
+
+let authToken = null
+
+export function setAuthToken(token) {
+  authToken = token || null
+}
 
 async function request(path, options = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
       ...(options.headers || {}),
     },
   })
