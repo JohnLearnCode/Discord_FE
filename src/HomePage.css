@@ -217,6 +217,37 @@
   color: var(--text);
 }
 
+.sidebar-create {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  border: 1px dashed var(--bg-input);
+  border-radius: 4px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.sidebar-create:hover {
+  border-color: var(--blurple);
+  color: var(--text);
+}
+
+.sidebar-create-icon {
+  font-size: 16px;
+  line-height: 1;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  color: var(--blurple);
+}
+
 .channel-item {
   display: flex;
   align-items: center;
@@ -303,6 +334,28 @@
   color: var(--text-muted);
 }
 
+.logout-button {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 4px;
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.channel-sidebar--empty .logout-button {
+  margin: 16px 0 0;
+}
+
 /* Chat area */
 .chat-area {
   display: flex;
@@ -386,6 +439,10 @@
   gap: 12px;
 }
 
+.message--mine {
+  flex-direction: row-reverse;
+}
+
 .message-avatar {
   width: 40px;
   height: 40px;
@@ -406,6 +463,13 @@
 
 .message-body {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.message--mine .message-body {
+  align-items: flex-end;
 }
 
 .message-header {
@@ -430,6 +494,16 @@
   line-height: 1.4;
   color: var(--text);
   word-break: break-word;
+  background: var(--bg-input);
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 100%;
+  white-space: pre-wrap;
+}
+
+.message--mine .message-content {
+  background: var(--blurple);
+  color: #fff;
 }
 
 .chat-input {
@@ -811,3 +885,383 @@
   background: var(--danger);
   color: #fff;
 }
+
+.context-menu-note {
+  padding: 8px 10px;
+  max-width: 220px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* Voice: audio sink */
+.voice-audio-sink {
+  display: none;
+}
+
+/* Voice: sidebar channel block */
+.channel-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.channel-item--voice-active {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.voice-members {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0 4px 28px;
+}
+
+.voice-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.voice-member-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blurple);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.voice-member-name {
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Voice: persistent status bar */
+.voice-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--bg-input);
+  background: var(--bg-secondary);
+}
+
+.voice-status-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.voice-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.voice-status-dot--live {
+  background: #23a55a;
+}
+
+.voice-status-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.voice-status-title {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.voice-status-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.voice-status-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.voice-status-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.voice-status-button:hover {
+  background: var(--bg-input);
+}
+
+.voice-status-button--off {
+  background: var(--danger);
+  color: #fff;
+}
+
+.voice-status-button--leave {
+  background: var(--danger);
+}
+
+/* Voice: join / empty screen */
+.voice-join {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px;
+}
+
+.voice-join h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.voice-join p {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.voice-join-note {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.voice-join-button {
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  background: var(--blurple);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.voice-join-button:hover {
+  background: var(--blurple-dark);
+}
+
+.voice-join-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Voice: room */
+.voice-area {
+  overflow: hidden;
+}
+
+.voice-status-note {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.voice-stage {
+  margin: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.voice-stage-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+}
+
+.voice-stage-live {
+  color: #23a55a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.voice-stage-name {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.voice-stage-video {
+  width: 100%;
+  max-height: 52vh;
+  background: #000;
+  object-fit: contain;
+}
+
+.voice-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+.voice-grid--compact {
+  flex: none;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+.voice-tile {
+  background: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.1s ease;
+}
+
+.voice-tile--speaking {
+  border-color: #23a55a;
+}
+
+.voice-tile-avatar {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--blurple);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.voice-tile-muted {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  font-size: 11px;
+  display: grid;
+  place-items: center;
+}
+
+.voice-tile-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.voice-tile-you {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.voice-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.voice-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-input);
+  color: var(--text-muted);
+}
+
+.voice-badge--speaking {
+  background: #23a55a;
+  color: #fff;
+}
+
+/* Voice: controls */
+.voice-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid var(--bg-input);
+}
+
+.voice-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 96px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.voice-control:hover {
+  background: var(--bg-input);
+}
+
+.voice-control-icon {
+  font-size: 18px;
+}
+
+.voice-control--off {
+  background: var(--danger);
+  color: #fff;
+}
+
+.voice-control--active {
+  background: var(--blurple);
+  color: #fff;
+}
+
+.voice-control--leave {
+  background: var(--danger);
+  color: #fff;
+}
+
+.voice-control--leave:hover {
+  background: #d83c3e;
+}
+

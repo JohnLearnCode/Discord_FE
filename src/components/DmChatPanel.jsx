@@ -1,30 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import { api } from '../api.js'
-import { getSocket } from '../socket.js'
-import VoiceChannelView from './VoiceChannelView.jsx'
 
-export default function ChatArea({ user, channel, token }) {
+function userId(value) {
+  if (!value) return null
+  return typeof value === 'object' ? value._id : value
+}
+
+export default function DmChatPanel({ user, otherUser, socket, onBack }) {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const bottomRef = useRef(null)
-  const socket = getSocket(token)
-  const channelId = channel?._id
-  const channelType = channel?.type
 
   useEffect(() => {
-    if (!channelId || channelType !== 'text') {
-      setMessages([])
-      return
-    }
-
     let cancelled = false
     setLoading(true)
     setError('')
 
     api
-      .getMessagesByChannel(channelId)
+      .getConversation(user._id, otherUser._id)
       .then((data) => {
         if (!cancelled) setMessages(data)
       })
@@ -38,26 +33,28 @@ export default function ChatArea({ user, channel, token }) {
     return () => {
       cancelled = true
     }
-  }, [channelId, channelType])
+  }, [user._id, otherUser._id])
 
   useEffect(() => {
-    if (!channelId || channelType !== 'text' || !socket) return
-
-    socket.emit('join:channel', channelId)
+    if (!socket) return
 
     function handleMessage(msg) {
-      if (msg.channelId !== channelId) return
+      const senderId = userId(msg.senderId)
+      const receiverId = userId(msg.receiverId)
+      const isRelevant =
+        (senderId === user._id && receiverId === otherUser._id) ||
+        (senderId === otherUser._id && receiverId === user._id)
+
+      if (!isRelevant) return
+
       setMessages((prev) =>
         prev.some((m) => m._id === msg._id) ? prev : [...prev, msg],
       )
     }
 
-    socket.on('group:message', handleMessage)
-    return () => {
-      socket.off('group:message', handleMessage)
-      socket.emit('leave:channel', channelId)
-    }
-  }, [socket, channelId, channelType])
+    socket.on('p2p:message', handleMessage)
+    return () => socket.off('p2p:message', handleMessage)
+  }, [socket, user._id, otherUser._id])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -66,37 +63,31 @@ export default function ChatArea({ user, channel, token }) {
   function handleSubmit(e) {
     e.preventDefault()
     const text = input.trim()
-    if (!text || !channel || !socket?.connected) return
+    if (!text || !socket?.connected) return
 
-    socket.emit('group:message', {
-      channelId: channel._id,
+    socket.emit('p2p:message', {
+      receiverId: otherUser._id,
       message: text,
     })
 
     setInput('')
   }
 
-  if (!channel) {
-    return (
-      <main className="chat-area chat-area--empty">
-        <div className="chat-welcome">
-          <h1>Chào mừng đến với Discord</h1>
-          <p>Chọn một kênh để bắt đầu trò chuyện.</p>
-        </div>
-      </main>
-    )
-  }
-
-  if (channel.type === 'voice') {
-    return <VoiceChannelView channel={channel} />
-  }
-
   return (
-    <main className="chat-area">
+    <div className="dm-chat">
       <header className="chat-header">
-        <span className="chat-channel-icon">#</span>
-        <h2 className="chat-channel-title">{channel.title}</h2>
-        <span className="chat-topic">Chủ đề của kênh</span>
+        <button className="dm-back" onClick={onBack} aria-label="Quay lại">
+          ←
+        </button>
+        <span className="message-avatar dm-avatar">
+          {otherUser.avatarUrl ? (
+            <img src={otherUser.avatarUrl} alt={otherUser.username} />
+          ) : (
+            otherUser.username.charAt(0).toUpperCase()
+          )}
+        </span>
+        <h2 className="chat-channel-title">{otherUser.username}</h2>
+        <span className="chat-topic">Trực tuyến</span>
       </header>
 
       <div className="chat-messages">
@@ -104,12 +95,15 @@ export default function ChatArea({ user, channel, token }) {
 
         {!loading && error && <div className="chat-error">{error}</div>}
 
-        {!loading && messages.length === 0 && (
-          <div className="chat-empty">Chưa có tin nhắn nào. Hãy bắt đầu trò chuyện!</div>
+        {!loading && !error && messages.length === 0 && (
+          <div className="chat-empty">
+            Bắt đầu trò chuyện với {otherUser.username}.
+          </div>
         )}
 
         {messages.map((msg) => {
-          const isMine = msg.senderId?._id === user._id
+          const senderId = userId(msg.senderId)
+          const isMine = senderId === user._id
           return (
             <div className={`message ${isMine ? 'message--mine' : ''}`} key={msg._id}>
               <div className="message-avatar">
@@ -121,7 +115,9 @@ export default function ChatArea({ user, channel, token }) {
               </div>
               <div className="message-body">
                 <div className="message-header">
-                  <span className="message-author">{msg.senderId?.username || 'Ẩn danh'}</span>
+                  <span className="message-author">
+                    {isMine ? 'Bạn' : msg.senderId?.username || 'Ẩn danh'}
+                  </span>
                   <span className="message-time">
                     {new Date(msg.createdAt).toLocaleTimeString('vi-VN')}
                   </span>
@@ -137,7 +133,7 @@ export default function ChatArea({ user, channel, token }) {
       <form className="chat-input" onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder={`Nhắn tin vào #${channel.title}`}
+          placeholder={`Nhắn tin cho ${otherUser.username}`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -145,6 +141,6 @@ export default function ChatArea({ user, channel, token }) {
           Gửi
         </button>
       </form>
-    </main>
+    </div>
   )
 }
