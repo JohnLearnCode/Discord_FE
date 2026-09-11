@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import { api } from './api.js'
 import './LoginPage.css'
-import { API_BASE_URL } from './config.js'
 
 export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState('')
@@ -19,21 +19,8 @@ export default function LoginPage({ onLogin }) {
     setLoading(true)
 
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (!res.ok) {
-        setError('Đăng nhập thất bại')
-        return
-      }
-
-      const data = await res.json()
-      onLogin(data.data)
+      const data = await api.login(email, password)
+      onLogin(data)
     } catch {
       setError('Đăng nhập thất bại')
     } finally {
