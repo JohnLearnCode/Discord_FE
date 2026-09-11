@@ -1,0 +1,16 @@
+# Taste
+- Communicates in Vietnamese; prefers responses in Vietnamese. Confidence: 0.9
+- Prefers React + Vite for frontend projects. Confidence: 0.8
+- Consults project API documentation (e.g., API.md) before implementing API integrations. Confidence: 0.6
+- Expects realtime behavior: UI state should update live via sockets instead of requiring a page reload. Confidence: 0.6
+- Treats the database as the source of truth for UI data, and prefers adding a dedicated backend API endpoint over deriving the data on the client when a view is incorrect. Confidence: 0.8
+- Firmly against seed/mock/hardcoded data in the frontend; UI must be populated from the real backend API. Confidence: 0.75
+- Wants the existing codebase checked first (e.g., "kiểm tra xem có API X chưa") and new endpoints/code added only if nothing suitable exists, rather than duplicating functionality. Confidence: 0.6
+- Prefers the simplest, most direct implementation and dislikes over-engineering; gets visibly frustrated when a task is made harder or slower than necessary. Confidence: 0.7
+- Modifies the database directly (e.g., deleting documents/collections in Compass/Atlas) instead of going through the app's API, and expects direct DB edits to be reflected in the UI. Confidence: 0.55
+- For non-trivial features, wants an implementation plan produced first ("hãy lên plan") before any coding begins. Confidence: 0.6
+- Wants plans/implementations to cover the full stack (both frontend and backend) rather than frontend only, and is willing to have the existing backend repo modified. Confidence: 0.55
+- Willing to choose heavier, production-grade architecture (e.g., SFU over P2P mesh, adding screen share) when the feature warrants it, rather than always the simplest option. Confidence: 0.5
+- Wants concrete, step-by-step explanations of what was done and why (the mechanism, not just the outcome), especially when the feature is new to them and they are trying to understand it. Confidence: 0.7
+- Wants explanations/documentation persisted as markdown files inside the repo (e.g., `docs/*.md`) so they can read it later, rather than only as an in-chat reply. Confidence: 0.7
+- Prefers docs written for a beginner to a feature: background concepts first (what/why), then per-file code walkthroughs with the design rationale, plus run/test/debug sections. Confidence: 0.6
