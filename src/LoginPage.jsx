@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { api } from './api.js'
 import './LoginPage.css'
 
 export default function LoginPage({ onLogin }) {
@@ -18,21 +19,8 @@ export default function LoginPage({ onLogin }) {
     setLoading(true)
 
     try {
-      const res = await fetch('http://localhost:3000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (!res.ok) {
-        setError('Đăng nhập thất bại')
-        return
-      }
-
-      const data = await res.json()
-      onLogin(data.data)
+      const data = await api.login(email, password)
+      onLogin(data)
     } catch {
       setError('Đăng nhập thất bại')
     } finally {

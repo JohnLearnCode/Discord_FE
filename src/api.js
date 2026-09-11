@@ -1,4 +1,5 @@
-const BASE_URL = 'http://localhost:3000/api'
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
+const BASE_URL = `${API_URL}/api`
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -19,6 +20,11 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  login: (email, password) =>
+    request('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
   getServers: () => request('/servers'),
   getServer: (id) => request(`/servers/${id}`),
   createServer: (payload) =>
